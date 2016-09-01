@@ -41,9 +41,9 @@ loopClosure::KeyFrameCheckResult loopClosure::detectNewKeyFrame(keyFrame& curren
 // 这里简单采用衡量变换大概位移的长度。
 float loopClosure::evaluateTransformation(Eigen::Matrix4f& transformation)
 {
-    sixDoFState trans(transformation);
-    Eigen::Vector3f translation_tmp = trans.vec_.block<3,1>(0,0);
-    Eigen::Vector3f rotation_tmp = trans.vec_.block<3,1>(3,0);
+    SVector6f trans(transformation);
+    Eigen::Vector3f translation_tmp = trans.t();
+    Eigen::Vector3f rotation_tmp = trans.r();
     return fabs(smallerOne(translation_tmp.norm(),
                     2*M_PI-rotation_tmp.norm()))
             + fabs(translation_tmp.norm());

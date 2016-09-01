@@ -41,7 +41,7 @@ int fileSource::generateNewFrame(frame &aframe)
     }
 
     PointCloudT_Ptr cloud = generatePointCloud(depth);
-    aframe = frame(*cloud, current_time_);
+    aframe = frame(*cloud, current_time_, frame_start_+frame_count_);
 
     depth.release();
     cloud->points.clear();

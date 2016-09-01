@@ -43,9 +43,9 @@ int main_kalman(int argc, char ** argv)
     //Eigen::Matrix4f last_F_TO_LKF = Eigen::Matrix4f::Identity(); // last frame to latest key frame
     Eigen::Matrix4f latest_KF_TO_RKF = Eigen::Matrix4f::Identity(); // latest key frame to reference key frame
     Eigen::Matrix4f current_F_TO_RKF = Eigen::Matrix4f::Identity(); // current frame to reference key frame
-    sixDoFState measure_CF_TO_LKF;
+    SVector6f measure_CF_TO_LKF;
     //sixDoFState measure_LKF_TO_RKF;
-    sixDoFState measure_CF_TO_RKF;
+    SVector6f measure_CF_TO_RKF;
 
     //------------------------------------------------------------
     // icp
@@ -109,13 +109,13 @@ int main_kalman(int argc, char ** argv)
         kalmanFilter::StateVecT current_state =
                 KALMAN_FILTER.getStates();
 
-        sixDoFState cf_to_lf_guess_trans; // current frame to last frame guess
+        SVector6f cf_to_lf_guess_trans; // current frame to last frame guess
         cf_to_lf_guess_trans.t() = current_state.block<3,1>(3,0)*delta_time;
         cf_to_lf_guess_trans.r() = current_state.block<3,1>(9,0)*delta_time;
         cf_to_lf_guess_trans.toMatrix4f(guess);
         guess = current_F_TO_LKF;// * guess;
 
-        sixDoFState cf_to_LKF_guess; // current frame to latest key frame guess
+        SVector6f cf_to_LKF_guess; // current frame to latest key frame guess
         cf_to_LKF_guess.fromMatrix4f(guess);
         cout << "guess: " << cf_to_LKF_guess << endl;
 
@@ -145,8 +145,6 @@ int main_kalman(int argc, char ** argv)
 
             // refine current keyframe
             current_keyframe.refine(transformed_tmp_cloud);
-            // downsample current keyframe's point cloud;
-            current_keyframe.downsampleCloud(downsample_leaf_size);
             icp_runner.updateLatestKeyFrame(current_keyframe);
 
             cout << "current_F_TO_RKF: " << endl

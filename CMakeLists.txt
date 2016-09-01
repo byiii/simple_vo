@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 project(measure_base)
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_CXX_COMPILER "g++")
 
 include(CheckCXXCompilerFlag)
@@ -16,12 +16,14 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-set(PCL_DIR /home/jyi/Devel/pcl/180/share/pcl-1.8)
-#set(PCL_DIR /home/jyi/Devel/pcl/share/pcl-1.8)
+#set(PCL_DIR /home/jyi/Devel/pcl/180/share/pcl-1.8)
+set(PCL_DIR /home/jyi/Devel/pcl/share/pcl-1.8)
 set(OpenCV_DIR /home/jyi/Devel/OpenCV/2412/share/OpenCV)
+SET(VTK_DIR /home/jyi/Devel/VTK/lib/cmake/vtk-6.3)
 
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED)
+FIND_PACKAGE(VTK REQUIRED)
 
 SET(G2O_ROOT /home/jyi/Devel/g2o)
 set(G2o_LIBRARIES_DIR ${G2O_ROOT}/lib)
@@ -38,8 +40,8 @@ set(Libconfig_LIBS libconfig.a libconfig++.a)
 
 ADD_DEFINITIONS( ${PCL_DEFINITIONS} )
 INCLUDE_DIRECTORIES(${PCL_INCLUDE_DIRS} ${Libconfig_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Libconfig_LIB_DIR})
-LINK_LIBRARIES(${PCL_LIBRARY_DIRS} ${Libconfig_LIBS})
+LINK_DIRECTORIES(${Libconfig_LIB_DIR} ${PCL_LIBRARY_DIRS})
+LINK_LIBRARIES(${Libconfig_LIBS})
 
 FIND_PACKAGE(OpenMP REQUIRED)
 if(OPENMP_FOUND)

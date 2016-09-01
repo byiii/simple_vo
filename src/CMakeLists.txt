@@ -36,13 +36,13 @@ suitesparseconfig)
 
 add_executable(main main.cpp
 main_func.h
-main0.cpp
-main1.cpp
+#main0.cpp
+#main1.cpp
 main2.cpp
 )
 target_link_libraries(main
                       measurement_base ${OpenCV_LIBS} ${PCL_LIBRARIES}
-                      ${Libconfig_LIBS}
+                      ${Libconfig_LIBS} ${VTK_LIBS}
 ${G2O_LIBS}
 )
 
@@ -64,5 +64,5 @@ set(SLAM_BASE_FILES axis_angle.cpp
 add_library(measurement_base ${SLAM_BASE_FILES})
 target_link_libraries(measurement_base
                       ${OpenCV_LIBS} ${PCL_LIBRARIES} ${Libconfig_LIBS}
-${G2O_LIBS}
+${G2O_LIBS} ${VTK_LIBS}
 )
