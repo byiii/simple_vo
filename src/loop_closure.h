@@ -9,7 +9,7 @@ class loopClosure
 {
 public:
     // 回环检测结果
-    enum KeyFrameCheckResult{TOO_CLOSE=0, KEYFRAME, TOO_FAR_AWAY};
+    enum KeyFrameCheckResult{CLOSE=0, KEYFRAME, FAR_AWAY};
 
     // 构造函数
     loopClosure();
@@ -23,12 +23,7 @@ public:
                                           Eigen::Matrix4f& transformation);
 
     //
-    void initialize()
-    {
-        CONFIGURE.get<float>("lc_keyframe_threshold", keyframe_threshold);
-        CONFIGURE.get<float>("lc_too_far_away_threshold", too_far_away_threshold);
-    }
-
+    void initialize();
     // 检测临近回环
     void detectNearbyKeyFrames();
     // 随机抽查检测回环

@@ -29,8 +29,7 @@ public:
   // 构造函数，从点云数据和时间标记生成
   frame(const PointCloudT cloud, float frame_time_stamp, int id);
   // destructor
-  virtual ~frame()
-  {
+  virtual ~frame() {
     this->release();
   }
   

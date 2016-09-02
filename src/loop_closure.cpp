@@ -1,17 +1,13 @@
 #include "loop_closure.h"
 #include "state_variables.h"
 
+using std::cout;
+using std::endl;
+
 #include <cmath>
 
-// 构造函数
-loopClosure::loopClosure()
-{
-    keyframe_threshold = 0.05;
-    too_far_away_threshold = 0.10;
-}
-
 // 返回两个数中较小的值，min用起来有问题
-inline float smallerOne(float a, float b)
+inline float mMIN(float a, float b)
 {
     if(a<b)
         return a;
@@ -19,7 +15,18 @@ inline float smallerOne(float a, float b)
         return b;
 }
 
+// 构造函数
+loopClosure::loopClosure()
+{
+    keyframe_threshold = 0.08;
+    too_far_away_threshold = 0.13;
+}
 
+    void loopClosure::initialize() {
+        CONFIGURE.get<float>("lc_keyframe_threshold", keyframe_threshold);
+        CONFIGURE.get<float>("lc_too_far_away_threshold", too_far_away_threshold);
+    }
+    
 // 检测一个输入帧是否是关键帧
 loopClosure::KeyFrameCheckResult loopClosure::detectNewKeyFrame(keyFrame& currentKF,
                                                    frame& aFrame,
@@ -28,13 +35,13 @@ loopClosure::KeyFrameCheckResult loopClosure::detectNewKeyFrame(keyFrame& curren
     float score = evaluateTransformation(transformation);
     // 如果score太小，认为太接近
     if(score<keyframe_threshold)
-        return TOO_CLOSE;
+        return CLOSE;
     // 距离合适，判定为关键帧
     else if(score<too_far_away_threshold)
         return KEYFRAME;
     // 否则太远了，可能不准确
     else
-        return TOO_FAR_AWAY;
+        return FAR_AWAY;
 }
 
 // 量化一个六自由度变换，作为是否信任新输入帧信息的判定
@@ -44,7 +51,8 @@ float loopClosure::evaluateTransformation(Eigen::Matrix4f& transformation)
     SVector6f trans(transformation);
     Eigen::Vector3f translation_tmp = trans.t();
     Eigen::Vector3f rotation_tmp = trans.r();
-    return fabs(smallerOne(translation_tmp.norm(),
+    
+    return fabs(mMIN(translation_tmp.norm(),
                     2*M_PI-rotation_tmp.norm()))
             + fabs(translation_tmp.norm());
 }

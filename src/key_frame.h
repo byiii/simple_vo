@@ -7,13 +7,10 @@
 
 //  关键帧 类
 class keyFrame : public frame
-{
-protected:
-  Eigen::Matrix4f toLKF_;
-  Eigen::Matrix4f toRKF_;
-  keyFrame *ptrLKF_;
-  
+{  
 public:
+  typedef std::vector<keyFrame*> keyFramesVec;
+  
   keyFrame();
   keyFrame(frame& aFrame);
   ~keyFrame();
@@ -31,6 +28,11 @@ public:
   keyFrame& operator=(const keyFrame &another);
   // 融合新的输入帧点云数据，优化当前关键帧
   void refine(PointCloudT_Ptr &transformed_cloud);
+  
+  protected:
+  Eigen::Matrix4f toLKF_;
+  Eigen::Matrix4f toRKF_;
+  keyFrame *ptrLKF_;
 };
 
 #endif // KEY_FRAME_H

@@ -41,35 +41,28 @@ typedef NormalCloudT::Ptr NormalCloudT_Ptr;
 class cameraIntrinsicParameters
 {
 public:
-    double cx;
-    double cy;
-    double fx;
-    double fy;
-    double scale;
-
-    cameraIntrinsicParameters()
-        : cx(325.5),
-          cy(253.5),
-          fx(518.0),
-          fy(519.0),
-          scale(1.0e3)
-    {
-    }
-
-    // 重载运算符： ！=
-    bool operator !=(const cameraIntrinsicParameters& another)
-    {
-        return !(operator ==(another));
-    }
-
-    // 运算符重载： ==，可能用不到
-    bool operator ==(const cameraIntrinsicParameters& another)
-    {
-        bool result = false;
-        result = (cx==another.cx) && (cy==another.cy) && (fx==another.fx)
-                && (fy==another.fy) && (scale==another.scale);
-        return result;
-    }
+  double cx;
+  double cy;
+  double fx;
+  double fy;
+  double scale;
+  
+  cameraIntrinsicParameters()
+  : cx(325.5),
+  cy(253.5),
+  fx(518.0),
+  fy(519.0),
+  scale(1.0e3)
+  {
+  }
+  
+  // 重载运算符： ！=
+  inline bool operator !=(const cameraIntrinsicParameters& another) {
+    return !(operator ==(another));
+  }
+  
+  // 运算符重载： ==，可能用不到
+  bool operator ==(const cameraIntrinsicParameters& another);
 };
 
 
@@ -77,16 +70,6 @@ public:
 // const char* CONFIG_FILE = "../config/parameters.cfg";
 static parameterConfig CONFIGURE("../config/parameters.cfg");
 
-inline void printVector(Eigen::VectorXf vec, bool row_p = true)
-{
-    if(!row_p)
-        std::cout << vec << std::endl;
-    else
-    {
-        for(size_t i=0; i<vec.rows()-1; ++i)
-            std::cout << vec(i) << ", ";
-        std::cout << vec(vec.rows());
-    }
-}
+void printVector(Eigen::VectorXf vec, bool row_p = true);
 
 #endif // COMMON_DEFINITIONS_H

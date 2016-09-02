@@ -36,6 +36,9 @@ struct SVector6f
     this->vec_ = another.vec_;
     return *this;
   }
+  inline float& operator()(unsigned int i) {
+    return vec_(i);
+  }
   
   friend std::ostream& operator<<(std::ostream& out, const SVector6f& state);
   // 将向量表示转换成4x4矩阵表示
@@ -43,9 +46,9 @@ struct SVector6f
   // 将4x4矩阵转换成六自由度向量表示
   void toMatrix4f(Eigen::Matrix4f &mat);
   // 获取平移向量
-  vector3f t();
+  const vector3f& t();
   // 获取旋转角向量
-  vector3f r();
+  const vector3f& r();
 };
 
 //------------------------------------------------------------
@@ -75,6 +78,9 @@ public:
     this->vec_ = another.vec_;
     return *this;
   }
+  inline float& operator()(unsigned int i) {
+    return vec_(i);
+  }
   
   // 从旋转矩阵中得到状态向量
   void fromMatrix4f(Eigen::Matrix4f& mat);
@@ -83,6 +89,8 @@ public:
   SVector6f getState();
   // 获取速度向量，以六自由度状态（sixDoFState）类形式保存
   SVector6f getRatio();
+  
+  friend std::ostream& operator<<(std::ostream& out, const SVector12f& state);
 };
 
 #endif // STATE_VARIABLES_H

@@ -6,12 +6,12 @@
 using std::cout;
 using std::endl;
 
-SVector6f::vector3f SVector6f::r() {
+const SVector6f::vector3f& SVector6f::r() {
   float *p = vec_.data();
   return Eigen::Map<Eigen::Matrix<float, 3, 1> >(p, 3);
 }
 
-SVector6f::vector3f SVector6f::t() {
+const SVector6f::vector3f& SVector6f::t() {
   float *p = vec_.data();
   return Eigen::Map<Eigen::Matrix<float, 3, 1> >(p+3, 3);
 }
@@ -105,16 +105,24 @@ SVector6f SVector12f::getState()
   // Block of size (p,q), starting at (i,j)
   // matrix.block(i,j,p,q);
   // matrix.block<p,q>(i,j);
-  res.r() = vec_.block<3,1>(0,0);
-  res.t() = vec_.block<3,1>(6,0);
+  res.vec_.block<3,1>(0,0) = vec_.block<3,1>(0,0);
+  res.vec_.block<3,1>(3,0) = vec_.block<3,1>(6,0);  
   
+  cout << "getState: " << res << endl;
   return res;
 }
 
 SVector6f SVector12f::getRatio()
 {
   SVector6f res;
-  res.r() = vec_.block<3,1>(3,0);
-  res.t() = vec_.block<3,1>(9,0);
+  res.vec_.block<3,1>(0,0) = vec_.block<3,1>(3,0);
+  res.vec_.block<3,1>(3,0) = vec_.block<3,1>(9,0);
+  
+  cout << "getRatio: " << res << endl;
   return res;
+}
+
+std::ostream& operator<<(std::ostream& out, const SVector12f& state) {
+  out << state.vec_.block<6,1>(0,0) << "\n" << state.vec_.block<6,1>(6,0);
+  return out;
 }
